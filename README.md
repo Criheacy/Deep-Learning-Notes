@@ -29,11 +29,11 @@ Loss function 为损失函数，负责评价一个函数的好坏，并且应该
    顾名思义，即每个训练集上的样本真实值与预测值先差再平方最后取平均（均方误差倒过来就是计算步骤）。属于比较简单的一种算法，常用在各种机器学习模型里（比如最简单的 $y=wx+b$ 线性回归）
 
    > 不过 MSE 有一个显著的缺点：在处理**分类问题**中，一般分类的依据都是函数的输出是一个 N 维向量对应 N 个类别，向量里的哪个分量最大就取哪个类（最大似然估计）。而当分类错误时， MSE 对函数的惩罚仅限于一个二次项，这是远远不够的（对比后面介绍的交叉熵损失（ Cross Entropy，CE ）会直接趋向于无穷大，二者的对比见下图）。
-   > ![image-20211229224502793](notes.assets/image-20211229224502793.png)
+   > ![image-20211229224502793](README.assets/image-20211229224502793.png)
    >
    > 这个问题当使用 Sigmoid 或 Softmax 作为激活函数时尤其明显。因为函数得到的数值要经过激活函数处理，而这两个函数得到的结果在接近 0 和 1 时的偏导数值很小（如下图）。而刚开始训练的模型经过激活函数的输出都会集中在 0 和 1 附近，配合 MSE 时会出现会出现学习速率极其缓慢，也被称为「梯度消失」。解决「梯度消失」的方法就是更换 Cross Entropy 作为 Loss function 。
    >
-   > ![image-20211229223943726](notes.assets/image-20211229223943726.png)
+   > ![image-20211229223943726](README.assets/image-20211229223943726.png)
 
 2. Classification Error （分类误差，或分类错误率）
    因为在分类任务中不适合使用均方误差（因为会惩罚「过于正确」的样本， Classification 节会提到），所以这里采用二值来统计**被分类错误的样本占总样本数的百分比**，称其为 Classification Error。计算起来比 MSE 还简单，适用于分类任务。
@@ -123,7 +123,7 @@ Back Propagation （反向传播）本质只是一种比较高效地计算 Gradi
 
 实际上就是高中就学过的链式求导法则，公式如下：
 
-![image-20211229212642549](notes.assets/image-20211229212642549.png)
+![image-20211229212642549](README.assets/image-20211229212642549.png)
 
 神经网络的构造形式很类似： 
 $$
@@ -162,7 +162,7 @@ Back Propagation 算法就是由 Forward Pass 和 Backward Pass 两部分组成�
     >
     > 直观上来看，「梯度（或者叫偏导数）」反映了改变这个参数会对最终的结果（ Loss function ）产生多大的影响。而 Sigmoid 激活函数的出现会削弱这种影响，并且每经过一层都会削弱一次，导致层层衰减，最后偏导数已经小到几乎为 0 。
     >
-    > ![image-20211230165902686](notes.assets/image-20211230165902686.png)
+    > ![image-20211230165902686](README.assets/image-20211230165902686.png)
     >
     > 那么解决的方法自然就从激活函数入手。介绍几种不会出现「梯度消失」的 Activation function
     >
@@ -190,7 +190,7 @@ Back Propagation 算法就是由 Forward Pass 和 Backward Pass 两部分组成�
     调整减少训练轮数
   
     - 一般情况下，随着训练轮数的增加， Training set 上的 Loss 是在逐步减小的；但我们要找到是能使 Testing set 上的 Loss 最小的训练轮数并停在这里；这里往右会过拟合，往左会欠拟合。但是我们不知道真正 Testing set 的分布，也不能拿 Testing set 来筛选模型；我们能做的只有在 Training set 上额外切出一部分来做 Validation set ，模拟 Testing set 的分布情况，从而避免过拟合的发生。这里也可以使用 Cross validation （交叉验证）等方法。
-      ![image-20211230202813788](notes.assets/image-20211230202813788.png)
+      ![image-20211230202813788](README.assets/image-20211230202813788.png)
   
   - 重新设计简单的模型
   
